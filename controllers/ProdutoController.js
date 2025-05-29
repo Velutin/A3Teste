@@ -27,11 +27,11 @@ class ProdutoController {
         if (!nome || !peso || !preco || !estoque) {
             return res.status(400).json({ error: "Campos nome, peso, preco e estoque são obrigatórios." });
         }
-        // Para os campos numéricos, é bom garantir que são números
+
         const parsedPeso = parseFloat(peso);
         const parsedPreco = parseFloat(preco);
         const parsedEstoque = parseInt(estoque, 10);
-        const parsedDisponivelVenda = disponivel_venda !== undefined ? parseInt(disponivel_venda, 10) : 1; // Default para 1 (disponível)
+        const parsedDisponivelVenda = disponivel_venda !== undefined ? parseInt(disponivel_venda, 10) : 1;
 
 
     if (isNaN(parsedPeso) || isNaN(parsedPreco) || isNaN(parsedEstoque) || isNaN(parsedDisponivelVenda)) {
