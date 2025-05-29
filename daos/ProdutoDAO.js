@@ -41,6 +41,26 @@ class ProdutoDAO {
             callback(null, this.changes > 0); 
         });
     }
+    static atualizarEstoqueAposVenda(produtoid,quantidadeVendida, callback){
+    this.findById(produtoid,(err,produto)=>{
+        if(err){
+            return callback(err);
+        }if(!produto){
+            return callback(new Error("Produto não encontrado."));
+        }
+        const novoEstoque = produto.estoque - quantidadeVendida;
+        this.update(produtoid,produto.preco,novoEstoque,produto.disponivel_venda,(errUpdate,sucesso)=>{
+        if(errUpdate){
+            return callback(errUpdate);
+        }if (!sucesso){ 
+            return callback(new Error("Nenhuma alteração de estoque realizada"))
+        }callback(null,true);
+        });
+    }
+    )}
+    
+
+    
 
     static delete(id, callback) {
         const query = "DELETE FROM produto WHERE id = ?";
@@ -49,6 +69,8 @@ class ProdutoDAO {
             callback(null, this.changes > 0); 
         });
     }
+
+
 }
 
 module.exports = ProdutoDAO;

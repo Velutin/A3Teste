@@ -2,6 +2,7 @@ const express = require("express");
 const ClienteController = require("./controllers/ClienteController");
 const VendedorController = require("./controllers/VendedorController");
 const ProdutoController = require("./controllers/ProdutoController");
+const PedidoController = require("./controllers/PedidoController");
 
 const app = express();
 const APP_PORT = process.env.APP_PORT || 3000;
@@ -13,7 +14,7 @@ app.listen(APP_PORT, () =>{
     console.log(`Acesse a url http://localhost:${APP_PORT}`);
 });
 
-app.get("/",(req,res) => res.send("API Version 1.1.0 on-line!"));
+app.get("/",(req,res) => res.send("Tudo rodando certinho"));
 
 
 app.get("/Clientes",ClienteController.index);
@@ -33,3 +34,9 @@ app.get("/Produto/:id",ProdutoController.show);
 app.post("/Produto",ProdutoController.create);
 app.put("/Produto/:id",ProdutoController.update);
 app.delete("/Produto/:id",ProdutoController.delete);
+
+app.get("/Pedido",PedidoController.index);
+app.get("/Pedido/:id",PedidoController.show);
+app.post("/Pedido",PedidoController.create);
+app.put("/Pedido/:id",PedidoController.update);
+app.delete("/Pedido/:id",PedidoController.delete);

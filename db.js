@@ -4,6 +4,26 @@
     class Database {
         _createTable(){
 
+            const tbpedidos = `
+                CREATE TABLE IF NOT EXISTS pedidos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                fk_matricula_vendedor INTEGER NOT NULL,
+                fk_id_cliente INTEGER NOT NULL,
+                fk_id_produto INTEGER NOT NULL,
+                quantidade REAL NOT NULL,
+                valor_total REAL NOT NULL,
+                FOREIGN KEY (fk_matricula_vendedor) REFERENCES vendedores(matricula),
+                FOREIGN KEY (fk_id_cliente) REFERENCES clientes(id),
+                FOREIGN KEY (fk_id_produto) REFERENCES produto(id)
+                );
+            `;  
+             this.db.run(tbpedidos,(err) => {
+                if(err) console.error("Erro ao criar tabela: ", err.message);
+                else {
+                    console.log("Tabela 'produtos' verificada/criada.");
+                }
+            });            
+
             const tbproduto = `
                 CREATE TABLE IF NOT EXISTS produto (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
