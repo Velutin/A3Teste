@@ -1,6 +1,7 @@
 const express = require("express");
 const JogoController = require("./controllers/JogoController");
 const EmpresaController = require("./controllers/EmpresaController");
+const ClienteController = require("./controllers/ClienteController");
 
 const app = express();
 const APP_PORT = process.env.APP_PORT || 3000;
@@ -15,6 +16,12 @@ app.listen(APP_PORT, () =>{
 app.get("/",(req,res) => res.send("API Version 1.1.0 on-line!"));
 
 app.get("/jogos",JogoController.index);
+
+app.get("/clientes",ClienteController.index);
+app.get("/clientes/:id",ClienteController.show);
+app.post("/clientes",ClienteController.create);
+app.put("/clientes/:id",ClienteController.update);
+app.delete("/clientes/:id",ClienteController.delete);
 
 app.get("/jogos/:id",JogoController.show);
 

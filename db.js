@@ -4,6 +4,23 @@
     class Database {
         _createTable(){
 
+            const tbCliente = `
+                CREATE TABLE IF NOT EXISTS clientes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE,
+                telefone TEXT NOT NULL,
+                endereço TEXT NOT NULL,
+                cpf TEXT NOT NULL UNIQUE
+                );
+            `;
+            this.db.run(tbCliente,(err) => {
+                if(err) console.error("Erro ao criar tabela: ", err.message);
+                else {
+                    console.log("Tabela 'clientes' verificada/criada.");
+                }
+            });            
+
             const tbEmpresa = `
                 CREATE TABLE IF NOT EXISTS empresas (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
