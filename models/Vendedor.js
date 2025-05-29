@@ -1,13 +1,12 @@
-class Cliente {
-    constructor(id,nome,email,telefone,endereço,cpf){
-        this.id = id;
+class Vendedor {
+    constructor(matricula,nome,email,telefone,endereço,cpf){
+        this.matricula = matricula;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.endereço = endereço;
         this.cpf = cpf;
-        this.valorGasto = 0;
     }
 }
 
-module.exports = Cliente;
+module.exports = Vendedor;

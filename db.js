@@ -3,7 +3,22 @@
 
     class Database {
         _createTable(){
-
+            const tbVendedor = `
+                CREATE TABLE IF NOT EXISTS vendedores (
+                matricula INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE,
+                telefone TEXT NOT NULL,
+                endereço TEXT NOT NULL,
+                cpf TEXT NOT NULL UNIQUE
+                );
+            `;
+            this.db.run(tbVendedor,(err) => {
+                if(err) console.error("Erro ao criar tabela: ", err.message);
+                else {
+                    console.log("Tabela 'vendedores' verificada/criada.");
+                }
+            });   
             const tbCliente = `
                 CREATE TABLE IF NOT EXISTS clientes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -11,7 +26,8 @@
                 email TEXT NOT NULL UNIQUE,
                 telefone TEXT NOT NULL,
                 endereço TEXT NOT NULL,
-                cpf TEXT NOT NULL UNIQUE
+                cpf TEXT NOT NULL UNIQUE,
+                valorgasto REAL DEFAULT 0
                 );
             `;
             this.db.run(tbCliente,(err) => {

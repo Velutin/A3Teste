@@ -35,7 +35,7 @@ class ClienteController {
     ClienteDAO.update(id,nome,email,telefone,endereço,(err,cliente)=>{
         if (err) return res.status(500).json({error:err.message});
         if (!cliente) return res.status(404).json({error:err.message});
-        res.send(cliente);        
+        res.json({ message: "Cliente atualizado com sucesso." });        
     });
     }
     delete(req,res) {

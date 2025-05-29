@@ -2,6 +2,7 @@ const express = require("express");
 const JogoController = require("./controllers/JogoController");
 const EmpresaController = require("./controllers/EmpresaController");
 const ClienteController = require("./controllers/ClienteController");
+const VendedorController = require("./controllers/VendedorController");
 
 const app = express();
 const APP_PORT = process.env.APP_PORT || 3000;
@@ -22,6 +23,12 @@ app.get("/clientes/:id",ClienteController.show);
 app.post("/clientes",ClienteController.create);
 app.put("/clientes/:id",ClienteController.update);
 app.delete("/clientes/:id",ClienteController.delete);
+
+app.get("/Vendedor",VendedorController.index);
+app.get("/Vendedor/:matricula",VendedorController.show);
+app.post("/Vendedor",VendedorController.create);
+app.put("/Vendedor/:matricula",VendedorController.update);
+app.delete("/Vendedor/:matricula",VendedorController.delete);
 
 app.get("/jogos/:id",JogoController.show);
 
