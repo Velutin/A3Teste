@@ -3,6 +3,24 @@
 
     class Database {
         _createTable(){
+
+            const tbproduto = `
+                CREATE TABLE IF NOT EXISTS produto (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                marca TEXT,
+                peso INTEGER NOT NULL,
+                preco REAL NOT NULL,
+                estoque INTEGER  NOT NULL,
+                disponivel_venda INTEGER DEFAULT 1
+                );
+            `;
+             this.db.run(tbproduto,(err) => {
+                if(err) console.error("Erro ao criar tabela: ", err.message);
+                else {
+                    console.log("Tabela 'produtos' verificada/criada.");
+                }
+            });   
             const tbVendedor = `
                 CREATE TABLE IF NOT EXISTS vendedores (
                 matricula INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,54 +54,8 @@
                     console.log("Tabela 'clientes' verificada/criada.");
                 }
             });            
-
-            const tbEmpresa = `
-                CREATE TABLE IF NOT EXISTS empresas (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL UNIQUE
-                );
-            `;
-            this.db.run(tbEmpresa,(err) => {
-                if(err) console.error("Erro ao criar tabela: ", err.message);
-                else {
-                    console.log("Tabela 'empresas' verificada/criada.");
-                    this._seed();
-                }
-            });
-            const tbJogo = `
-                CREATE TABLE IF NOT EXISTS jogos(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL UNIQUE,
-                categoria TEXT NOT NULL,
-                ano INTEGER NOT NULL,
-                fk_empresa INTEGER NOT NULL,
-                FOREIGN KEY(fk_empresa) REFERENCES empresas(id)
-                );          
-            `;
-            this.db.run(tbJogo,(err) => {
-                if (err) console.error("Erro ao criar a tabela: ",err.message);
-                else console.log("Tabela 'jogos' verificada/criada.");
-            });
         }
-        _seed(){
-            const query = "INSERT INTO empresas(nome) VALUES (?)";
-            this.db.run(query,["Nintendo"],(err) => {
-                if (err) console.error("Erro ao criar empresa: ", err.message);
-                else console.log("Empresa criada.");
-            });
-            this.db.run(query,["Ubisoft"],(err) => {
-                if (err) console.error("Erro ao criar empresa: ", err.message);
-                else console.log("Empresa criada.");
-            });
-            this.db.run(query,["Dumativa"],(err) => {
-                if (err) console.error("Erro ao criar empresa: ", err.message);
-                else console.log("Empresa criada.");
-            });
-            this.db.run(query,["Bethesda"],(err) => {
-                if (err) console.error("Erro ao criar empresa: ", err.message);
-                else console.log("Empresa criada.");
-            });
-                                                
+        _seed(){                                                
         }
         _connect(){
             this.db = new sqlite3.Database(process.env.DB_NAME,(err)=>{
