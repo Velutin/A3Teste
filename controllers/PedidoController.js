@@ -66,7 +66,7 @@ class PedidoController {
             res.json({ message: "Pedido atualizado com sucesso." });
         });
     }
-    //precisa terminar de fazer o delete funcionar 
+
     delete(req, res) {
         const id = req.params.id;
         PedidoDAO.findById(id, (err, pedido) => {
@@ -91,9 +91,9 @@ class PedidoController {
                             }if(sucessoUpdateEstoque) return  res.status(201).json({
                                 message: "Pedido removido com sucesso e estoque atualizado.",
                                 pedido :pedido})  });
-        });
+                             });
 
-        });        
+                    });        
         
     }
 )}
