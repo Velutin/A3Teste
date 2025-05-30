@@ -39,7 +39,7 @@ class PedidoController {
 
             PedidoDAO.create(fk_matricula_vendedor, fk_id_cliente, fk_id_produto, quantidade, valor_total, (err, pedido) => { 
             if (err) return res.status(500).json({ error: err.message });
-            ProdutoDAO.atualizarEstoqueAposVenda(fk_id_produto,quantidade,(errUpdateEstoque,sucessoUpdateEstoque)=> {
+            ProdutoDAO.atualizarEstoque(fk_id_produto,quantidade,(errUpdateEstoque,sucessoUpdateEstoque)=> {
                 if(errUpdateEstoque){
                     return res.status(201).json({message:"Pedido criado com sucesso, mas falha ao atualiazar o estoque, fazer atualização manual."})
                 }if(sucessoUpdateEstoque) return  res.status(201).json({
@@ -66,15 +66,28 @@ class PedidoController {
             res.json({ message: "Pedido atualizado com sucesso." });
         });
     }
-
+    //precisa terminar de fazer o delete funcionar 
     delete(req, res) {
         const id = req.params.id;
-
-        PedidoDAO.delete(id, (err, pedido) => { 
+        PedidoDAO.findById(id, (err, pedido) => {
             if (err) return res.status(500).json({ error: err.message });
-            if (!pedido) return res.status(404).json({ error: err.message });
+            if (!pedido) {               
+                res.status(404).json("Pedido não encontrado.")
+                
+            } else {res.json(pedido);}
+        });        
+        const quantidade = pedido.id;
 
-            res.json({ message: "Pedido removido com sucesso." });
+        ProdutoDAO.findById(fk_id_produto,(err,produto) => {
+            if (err) return res.status(500).json({ error: err.message });
+            if (!produto) return res.status(404).json({message: "Produto não encontrado"})
+                    PedidoDAO.delete(id, (err, pedido) => { 
+                        if (err) return res.status(500).json({ error: err.message });
+                        if (!pedido) return res.status(404).json({ error: err.message });
+                        res.json({ message: "Pedido removido com sucesso." });
+            })
+
+
         });
     }
 }

@@ -41,7 +41,7 @@ class ProdutoDAO {
             callback(null, this.changes > 0); 
         });
     }
-    static atualizarEstoqueAposVenda(produtoid,quantidadeVendida, callback){
+    static atualizarEstoque(produtoid,quantidadeVendida, callback){
     this.findById(produtoid,(err,produto)=>{
         if(err){
             return callback(err);
