@@ -74,22 +74,28 @@ class PedidoController {
             if (!pedido) {               
                 res.status(404).json("Pedido não encontrado.")
                 
-            } else {res.json(pedido);}
-        });        
-        const quantidade = pedido.id;
+            }
 
-        ProdutoDAO.findById(fk_id_produto,(err,produto) => {
+            const quantidade = -pedido.quantidade;
+            const fk_id_produto = pedido.fk_id_produto;
+
+            ProdutoDAO.findById(fk_id_produto,(err,produto) => {
             if (err) return res.status(500).json({ error: err.message });
             if (!produto) return res.status(404).json({message: "Produto não encontrado"})
                     PedidoDAO.delete(id, (err, pedido) => { 
                         if (err) return res.status(500).json({ error: err.message });
-                        if (!pedido) return res.status(404).json({ error: err.message });
-                        res.json({ message: "Pedido removido com sucesso." });
-            })
-
-
+                        if (!pedido) return res.status(404).json({ error: err.message }); 
+                        ProdutoDAO.atualizarEstoque(fk_id_produto,quantidade,(errUpdateEstoque,sucessoUpdateEstoque)=> {
+                            if(errUpdateEstoque){
+                                return res.status(201).json({message:"Pedido criado com sucesso, mas falha ao atualiazar o estoque, fazer atualização manual."})
+                            }if(sucessoUpdateEstoque) return  res.status(201).json({
+                                message: "Pedido removido com sucesso e estoque atualizado.",
+                                pedido :pedido})  });
         });
-    }
-}
 
+        });        
+        
+    }
+)}
+}
 module.exports = new PedidoController();
