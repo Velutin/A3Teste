@@ -3,6 +3,7 @@ const ClienteController = require("./controllers/ClienteController");
 const VendedorController = require("./controllers/VendedorController");
 const ProdutoController = require("./controllers/ProdutoController");
 const PedidoController = require("./controllers/PedidoController");
+const RelatorioController = require("./controllers/RelatorioController");
 
 const app = express();
 const APP_PORT = process.env.APP_PORT || 3000;
@@ -16,6 +17,7 @@ app.listen(APP_PORT, () =>{
 
 app.get("/",(req,res) => res.send("Tudo rodando certinho"));
 
+app.get("/relatorios",RelatorioController.findmostsell);
 
 app.get("/Clientes",ClienteController.index);
 app.get("/Clientes/:id",ClienteController.show);
