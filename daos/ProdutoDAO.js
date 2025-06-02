@@ -42,23 +42,23 @@ class ProdutoDAO {
         });
     }
     static atualizarEstoque(produtoid,quantidadeVendida, callback){
-    this.findById(produtoid,(err,produto)=>{
-        if(err){
-            return callback(err);
-        }if(!produto){
-            return callback(new Error("Produto não encontrado."));
+        this.findById(produtoid,(err,produto)=>{
+            if(err){
+                return callback(err);
+            }if(!produto){
+                return callback(new Error("Produto não encontrado."));
+            }
+            const novoEstoque = produto.estoque - quantidadeVendida;
+            this.update(produtoid,produto.preco,novoEstoque,produto.disponivel_venda,(errUpdate,sucesso)=>{
+            if(errUpdate){
+                return callback(errUpdate);
+            }if (!sucesso){ 
+                return callback(new Error("Nenhuma alteração de estoque realizada"))
+            }callback(null,true);
+            });
         }
-        const novoEstoque = produto.estoque - quantidadeVendida;
-        this.update(produtoid,produto.preco,novoEstoque,produto.disponivel_venda,(errUpdate,sucesso)=>{
-        if(errUpdate){
-            return callback(errUpdate);
-        }if (!sucesso){ 
-            return callback(new Error("Nenhuma alteração de estoque realizada"))
-        }callback(null,true);
-        });
-    }
-    )}
-    
+        )}
+        
 
     
 

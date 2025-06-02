@@ -66,7 +66,7 @@ class PedidoController {
             res.json({ message: "Pedido atualizado com sucesso." });
         });
     }
-
+    
     delete(req, res) {
         const id = req.params.id;
         PedidoDAO.findById(id, (err, pedido) => {
