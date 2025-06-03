@@ -17,7 +17,10 @@ app.listen(APP_PORT, () =>{
 
 app.get("/",(req,res) => res.send("Tudo rodando certinho"));
 
-app.get("/relatorios",RelatorioController.findmostsell);
+app.get("/relatorios/mais_vendido",RelatorioController.getMaisVendido);
+app.get("/relatorios/cliente/total/:id",RelatorioController.getComprasPorCliente);
+app.get("/relatorios/cliente/media/:id",RelatorioController.getCustoMedioPorCliente);
+app.get("/relatorios/produto_estoque_baixo",RelatorioController.getEstoqueBaixo)
 
 app.get("/Clientes",ClienteController.index);
 app.get("/Clientes/:id",ClienteController.show);
