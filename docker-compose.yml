@@ -22,6 +22,30 @@ services:
       sd-network:
         ipv4_address: 172.23.0.3
 
+  db:
+    image: nouchka/sqlite3:latest
+    container_name: sqlite-db
+    restart: "no"
+    volumes:
+      - sqlite_data:/data
+    networks:
+      sd-network:
+        ipv4_address: 172.23.0.2
+
+  relatorios:
+    image: python:3.11-slim
+    container_name: relatorios-app
+    restart: "no"
+    working_dir: /relatorios
+    volumes:
+      - ./relatorios:/relatorios
+      - sqlite_data:/app/db
+    environment:
+      - RELATORIOS_ENV=development
+    networks:
+      sd-network:
+        ipv4_address: 172.23.0.4
+
 volumes:
   sqlite_data:
 
