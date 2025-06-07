@@ -13,21 +13,30 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
-      - sqlite_data:/app/db
     environment:
       - NODE_ENV=development
       - APP_PORT=3000
-      - SQLITE_DB_PATH=/app/db/database.sqlite
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=27580971
+      - DB_NAME=postgres
     networks:
       sd-network:
         ipv4_address: 172.23.0.3
 
   db:
-    image: nouchka/sqlite3:latest
-    container_name: sqlite-db
+    image: postgres:16
+    container_name: postgres-db
     restart: "no"
+    environment:
+      POSTGRES_DB: chocolate_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senha123
+    ports:
+      - "5432:5432"
     volumes:
-      - sqlite_data:/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       sd-network:
         ipv4_address: 172.23.0.2
@@ -39,15 +48,19 @@ services:
     working_dir: /relatorios
     volumes:
       - ./relatorios:/relatorios
-      - sqlite_data:/app/db
     environment:
       - RELATORIOS_ENV=development
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=senha123
+      - DB_NAME=chocolate_db
     networks:
       sd-network:
         ipv4_address: 172.23.0.4
 
 volumes:
-  sqlite_data:
+  postgres_data:
 
 networks:
   sd-network:
