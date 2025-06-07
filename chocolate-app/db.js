@@ -1,28 +1,28 @@
-    const sqlite3 = require("sqlite3").verbose();
-    require("dotenv").config();
+const { Pool } = require('pg');
+// configure sua conexão com PostgreSQL aqui
 
-    class Database {
-        _createTable(){
+class Database {
+    _createTable(){
 
-            const tbpedidos = `
-                CREATE TABLE IF NOT EXISTS pedidos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                fk_matricula_vendedor INTEGER NOT NULL,
-                fk_id_cliente INTEGER NOT NULL,
-                fk_id_produto INTEGER NOT NULL,
-                quantidade REAL NOT NULL,
-                valor_total REAL NOT NULL,
-                FOREIGN KEY (fk_matricula_vendedor) REFERENCES vendedores(matricula),
-                FOREIGN KEY (fk_id_cliente) REFERENCES clientes(id),
-                FOREIGN KEY (fk_id_produto) REFERENCES produto(id)
-                );
-            `;  
-             this.db.run(tbpedidos,(err) => {
-                if(err) console.error("Erro ao criar tabela: ", err.message);
-                else {
-                    console.log("Tabela 'produtos' verificada/criada.");
-                }
-            });            
+        const tbpedidos = `
+            CREATE TABLE IF NOT EXISTS pedidos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fk_matricula_vendedor INTEGER NOT NULL,
+            fk_id_cliente INTEGER NOT NULL,
+            fk_id_produto INTEGER NOT NULL,
+            quantidade REAL NOT NULL,
+            valor_total REAL NOT NULL,
+            FOREIGN KEY (fk_matricula_vendedor) REFERENCES vendedores(matricula),
+            FOREIGN KEY (fk_id_cliente) REFERENCES clientes(id),
+            FOREIGN KEY (fk_id_produto) REFERENCES produto(id)
+            );
+        `;  
+         this.db.run(tbpedidos,(err) => {
+            if(err) console.error("Erro ao criar tabela: ", err.message);
+            else {
+                console.log("Tabela 'produtos' verificada/criada.");
+            }
+        });            
 
             const tbproduto = `
                 CREATE TABLE IF NOT EXISTS produto (
@@ -78,24 +78,33 @@
         _seed(){                                                
         }
         _connect(){
-            this.db = new sqlite3.Database(process.env.DB_NAME,(err)=>{
-                if (err){
-                    console.error("Erro ao conectar no SQlite: ",err.message);
-                }else{
-                    console.log("Conectado ao SQLite.");
-                    this._createTable();
-                }
-            })
+            this.db = new Pool({
+                host: process.env.DB_HOST,
+                port: process.env.DB_PORT,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASSWORD,
+                database: process.env.DB_NAME,
+            });
+        
+            this.db.connect()
+                .then(() => {
+                    console.log("Conectado ao PostgreSQL.");
+                    // Você pode criar tabelas aqui se quiser, mas normalmente faz isso fora da aplicação
+                    // this._createTable();
+                })
+                .catch(err => {
+                    console.error("Erro ao conectar no PostgreSQL: ", err.message);
+                });
         }
 
-        constructor(){
-            if(!Database.instance){
-                this._connect();
-                Database.instance = this;
-            }
-            return Database.instance;
+    constructor(){
+        if(!Database.instance){
+            this._connect();
+            Database.instance = this;
         }
-
+        return Database.instance;
     }
 
-    module.exports = new Database();
+}
+
+module.exports = new Database();
