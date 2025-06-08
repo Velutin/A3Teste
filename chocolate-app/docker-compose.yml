@@ -42,12 +42,16 @@ services:
         ipv4_address: 172.23.0.2
 
   relatorios:
-    image: node:18
+    build:
+      context: ./relatorios
+      dockerfile: Dockerfile
+    image: relatorios:latest
     container_name: relatorios-app
     restart: "no"
     working_dir: /relatorios
     volumes:
       - ./relatorios:/relatorios
+      - /relatorios/node_modules
     environment:
       - RELATORIOS_ENV=development
       - DB_HOST=db
